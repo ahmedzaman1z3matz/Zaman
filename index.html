@@ -3,96 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>General Knowledge Quiz App</title>
+    <title>GoTest - Online Preparation Portal</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .quiz-card { background: white; border-radius: 16px; padding: 25px; width: 100%; max-width: 450px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .quiz-header { text-align: center; margin-bottom: 20px; }
-        .quiz-header h2 { color: #1a73e8; margin-bottom: 5px; }
-        .question-box { font-size: 1.1rem; font-weight: 600; color: #333; margin-bottom: 20px; line-height: 1.5; }
-        .options-container { display: flex; flex-direction: column; gap: 12px; }
-        .option-btn { background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 10px; padding: 12px 15px; font-size: 1rem; text-align: left; cursor: pointer; transition: all 0.2s ease; outline: none; }
-        .option-btn:hover { background: #e8f0fe; border-color: #1a73e8; color: #1a73e8; }
-        .option-btn.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: #f4f6f9; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        header { background: #0d47a1; color: white; padding: 15px 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header h1 { font-size: 1.6rem; font-weight: bold; }
+        header p { font-size: 0.85rem; opacity: 0.9; margin-top: 4px; }
+
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; width: 100%; flex: 1; }
+
+        .category-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; color: #0d47a1; border-bottom: 2px solid #0d47a1; padding-bottom: 5px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
+        .card { background: white; padding: 20px 15px; border-radius: 12px; text-align: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; border: 1px solid #e0e0e0; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); border-color: #0d47a1; }
+        .card .icon { font-size: 2rem; margin-bottom: 8px; }
+        .card h3 { font-size: 1rem; color: #222; }
+
+        .quiz-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: none; }
+        .back-btn { background: #f0f0f0; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 600; margin-bottom: 15px; color: #555; }
+        .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .question-box { font-size: 1.05rem; font-weight: 600; margin-bottom: 20px; line-height: 1.5; color: #111; }
+        .options-container { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 12px; font-size: 0.95rem; text-align: left; cursor: pointer; transition: all 0.2s; }
+        .option-btn.correct { background: #d4edda; border-color: #28a745; color: #155724; font-weight: bold; }
         .option-btn.incorrect { background: #f8d7da; border-color: #dc3545; color: #721c24; }
-        .next-btn { margin-top: 20px; width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; display: none; }
-        .score-card { text-align: center; padding: 20px 0; }
-        .score-card h3 { font-size: 1.8rem; color: #28a745; margin-bottom: 10px; }
-        .restart-btn { margin-top: 15px; padding: 10px 20px; background: #1a73e8; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; }
+        .next-btn { margin-top: 20px; width: 100%; padding: 12px; background: #0d47a1; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; display: none; }
+
+        .score-card { text-align: center; padding: 30px 15px; display: none; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .score-card h2 { color: #28a745; font-size: 1.8rem; margin-bottom: 10px; }
+        .home-btn { margin-top: 20px; padding: 12px 24px; background: #0d47a1; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="quiz-card" id="quiz-card">
-        <div class="quiz-header">
-            <h2>🧠 Quiz Time</h2>
-            <p id="progress">Sawal 1 / 3</p>
+    <header>
+        <h1>📖 GoTest Preparation</h1>
+        <p>Online MCQs & Entry Test Preparation</p>
+    </header>
+
+    <div class="container">
+        <div id="home-view">
+            <div class="category-title">Select Subject / Category</div>
+            <div class="grid">
+                <div class="card" onclick="startQuiz('gk')">
+                    <div class="icon">🌍</div>
+                    <h3>General Knowledge</h3>
+                </div>
+                <div class="card" onclick="startQuiz('islam')">
+                    <div class="icon">🕌</div>
+                    <h3>Islamiat</h3>
+                </div>
+                <div class="card" onclick="startQuiz('computer')">
+                    <div class="icon">💻</div>
+                    <h3>Computer Science</h3>
+                </div>
+                <div class="card" onclick="startQuiz('english')">
+                    <div class="icon">📚</div>
+                    <h3>English Grammar</h3>
+                </div>
+            </div>
         </div>
 
-        <div id="quiz-body">
-            <div class="question-box" id="question">Sawal yahan aayega...</div>
+        <div class="quiz-card" id="quiz-view">
+            <button class="back-btn" onclick="goHome()">⬅ Back to Subjects</button>
+            <div class="quiz-header">
+                <h3 id="subject-title" style="color: #0d47a1;">Subject</h3>
+                <span id="progress" style="font-weight: bold; color: #666;">Sawal 1/2</span>
+            </div>
+            <div class="question-box" id="question">Question text...</div>
             <div class="options-container" id="options"></div>
             <button class="next-btn" id="next-btn" onclick="nextQuestion()">Agla Sawal ➔</button>
         </div>
 
-        <div class="score-card" id="score-card" style="display: none;">
-            <h3>Mubarak Ho! 🎉</h3>
-            <p id="score-text">Aapka score: 0 / 0</p>
-            <button class="restart-btn" onclick="restartQuiz()">Dobara Khelain</button>
+        <div class="score-card" id="score-view">
+            <h2>Nateega (Result) 🎉</h2>
+            <p id="score-text" style="font-size: 1.2rem; margin: 15px 0;">Score</p>
+            <button class="home-btn" onclick="goHome()">Main Menu Par Jayein</button>
         </div>
     </div>
 
     <script>
-        const quizData = [
-            {
-                question: "Pakistan ka qaumi khel (National Sport) kaun sa hai?",
-                options: ["Cricket", "Hockey", "Football", "Squash"],
-                correct: 1
+        const quizzes = {
+            gk: {
+                title: "General Knowledge",
+                questions: [
+                    { question: "Pakistan ka sabse bara Shehar konsa hai?", options: ["Lahore", "Karachi", "Islamabad", "Peshawar"], correct: 1 },
+                    { question: "Duniya ki sabse oonchi choti (Mount Everest) kis mulk mein hai?", options: ["Pakistan", "Nepal", "China", "India"], correct: 1 }
+                ]
             },
-            {
-                question: "Duniya ki sabse lambi nadi (River) kaun si hai?",
-                options: ["Amazon", "Indus", "Nile (Neel)", "Yangtze"],
-                correct: 2
+            islam: {
+                title: "Islamiat MCQs",
+                questions: [
+                    { question: "Islam ka pehla Rukn kya hai?", options: ["Namaz", "Roza", "Tauheed o Risalat", "Zakat"], correct: 2 },
+                    { question: "Hazrat Muhammad (S.A.W) par pehli wahi kis ghaar mein nazil hui?", options: ["Ghaar-e-Thawr", "Ghaar-e-Hira", "Mount Sinai", "Uhud"], correct: 1 }
+                ]
             },
-            {
-                question: "Computer ka dimaag (Brain of Computer) kise kaha jata hai?",
-                options: ["RAM", "Hard Disk", "CPU", "Monitor"],
-                correct: 2
+            computer: {
+                title: "Computer Science",
+                questions: [
+                    { question: "HTML ka poora naam kya hai?", options: ["Hyper Text Markup Language", "High Tech Main Language", "Hyperlink Text Mode Logic", "Home Tool Markup Language"], correct: 0 },
+                    { question: "Computer mein temporary memory kisey kehte hain?", options: ["Hard Disk", "ROM", "RAM", "CPU"], correct: 2 }
+                ]
+            },
+            english: {
+                title: "English Grammar",
+                questions: [
+                    { question: "Choose correct spelling:", options: ["Recieve", "Receive", "Receve", "Receeev"], correct: 1 },
+                    { question: "Antonym of 'Beautiful':", options: ["Pretty", "Ugly", "Cute", "Nice"], correct: 1 }
+                ]
             }
-        ];
+        };
 
+        let currentSubject = [];
         let currentIdx = 0;
         let score = 0;
 
+        function startQuiz(subjectKey) {
+            const data = quizzes[subjectKey];
+            currentSubject = data.questions;
+            currentIdx = 0;
+            score = 0;
+
+            document.getElementById("subject-title").innerText = data.title;
+            document.getElementById("home-view").style.display = "none";
+            document.getElementById("score-view").style.display = "none";
+            document.getElementById("quiz-view").style.display = "block";
+
+            loadQuestion();
+        }
+
         function loadQuestion() {
-            const currentData = quizData[currentIdx];
-            document.getElementById("progress").innerText = `Sawal ${currentIdx + 1} / ${quizData.length}`;
-            document.getElementById("question").innerText = currentData.question;
-            
+            const q = currentSubject[currentIdx];
+            document.getElementById("progress").innerText = `Sawal ${currentIdx + 1} / ${currentSubject.length}`;
+            document.getElementById("question").innerText = q.question;
+
             const optionsContainer = document.getElementById("options");
             optionsContainer.innerHTML = "";
             document.getElementById("next-btn").style.display = "none";
 
-            currentData.options.forEach((opt, index) => {
+            q.options.forEach((opt, index) => {
                 const btn = document.createElement("button");
                 btn.className = "option-btn";
                 btn.innerText = opt;
-                btn.onclick = () => selectOption(btn, index, currentData.correct);
+                btn.onclick = () => selectOption(btn, index, q.correct);
                 optionsContainer.appendChild(btn);
             });
         }
 
         function selectOption(selectedBtn, selectedIdx, correctIdx) {
-            const allButtons = document.querySelectorAll(".option-btn");
-            allButtons.forEach(btn => btn.disabled = true);
+            const allBtns = document.querySelectorAll(".option-btn");
+            allBtns.forEach(btn => btn.disabled = true);
 
             if (selectedIdx === correctIdx) {
                 selectedBtn.classList.add("correct");
                 score++;
             } else {
                 selectedBtn.classList.add("incorrect");
-                allButtons[correctIdx].classList.add("correct");
+                allBtns[correctIdx].classList.add("correct");
             }
 
             document.getElementById("next-btn").style.display = "block";
@@ -100,28 +169,24 @@
 
         function nextQuestion() {
             currentIdx++;
-            if (currentIdx < quizData.length) {
+            if (currentIdx < currentSubject.length) {
                 loadQuestion();
             } else {
-                showScore();
+                showResult();
             }
         }
 
-        function showScore() {
-            document.getElementById("quiz-body").style.display = "none";
-            document.getElementById("score-card").style.display = "block";
-            document.getElementById("score-text").innerText = `Aap ne ${quizData.length} mein se ${score} sahi jawabat diye!`;
+        function showResult() {
+            document.getElementById("quiz-view").style.display = "none";
+            document.getElementById("score-view").style.display = "block";
+            document.getElementById("score-text").innerText = `Aap ne ${currentSubject.length} mein se ${score} sahi jawabat diye!`;
         }
 
-        function restartQuiz() {
-            currentIdx = 0;
-            score = 0;
-            document.getElementById("quiz-body").style.display = "block";
-            document.getElementById("score-card").style.display = "none";
-            loadQuestion();
+        function goHome() {
+            document.getElementById("quiz-view").style.display = "none";
+            document.getElementById("score-view").style.display = "none";
+            document.getElementById("home-view").style.display = "block";
         }
-
-        loadQuestion();
     </script>
 </body>
 </html>
