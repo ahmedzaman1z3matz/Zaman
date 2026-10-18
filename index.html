@@ -8,12 +8,14 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
         body { background-color: #f4f6f9; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
         
+        /* Navigation Header */
         header { background: #0d47a1; color: white; padding: 15px 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         header h1 { font-size: 1.6rem; font-weight: bold; }
         header p { font-size: 0.85rem; opacity: 0.9; margin-top: 4px; }
 
         .container { max-width: 600px; margin: 20px auto; padding: 0 15px; width: 100%; flex: 1; }
 
+        /* Home View - Subject Categories */
         .category-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; color: #0d47a1; border-bottom: 2px solid #0d47a1; padding-bottom: 5px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
         .card { background: white; padding: 20px 15px; border-radius: 12px; text-align: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; border: 1px solid #e0e0e0; }
@@ -21,6 +23,7 @@
         .card .icon { font-size: 2rem; margin-bottom: 8px; }
         .card h3 { font-size: 1rem; color: #222; }
 
+        /* Quiz Screen */
         .quiz-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: none; }
         .back-btn { background: #f0f0f0; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 600; margin-bottom: 15px; color: #555; }
         .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
@@ -31,6 +34,7 @@
         .option-btn.incorrect { background: #f8d7da; border-color: #dc3545; color: #721c24; }
         .next-btn { margin-top: 20px; width: 100%; padding: 12px; background: #0d47a1; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; display: none; }
 
+        /* Result View */
         .score-card { text-align: center; padding: 30px 15px; display: none; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
         .score-card h2 { color: #28a745; font-size: 1.8rem; margin-bottom: 10px; }
         .home-btn { margin-top: 20px; padding: 12px 24px; background: #0d47a1; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; }
@@ -40,10 +44,12 @@
 
     <header>
         <h1>📖 GoTest Preparation</h1>
-        <p>Online MCQs & Entry Test Preparation</p>
+        <p>Online MCQs & Entry Test Preparation Portal</p>
     </header>
 
     <div class="container">
+        
+        <!-- HOME PAGE: Categories -->
         <div id="home-view">
             <div class="category-title">Select Subject / Category</div>
             <div class="grid">
@@ -66,6 +72,7 @@
             </div>
         </div>
 
+        <!-- QUIZ SCREEN -->
         <div class="quiz-card" id="quiz-view">
             <button class="back-btn" onclick="goHome()">⬅ Back to Subjects</button>
             <div class="quiz-header">
@@ -77,14 +84,17 @@
             <button class="next-btn" id="next-btn" onclick="nextQuestion()">Agla Sawal ➔</button>
         </div>
 
+        <!-- RESULT SCREEN -->
         <div class="score-card" id="score-view">
             <h2>Nateega (Result) 🎉</h2>
             <p id="score-text" style="font-size: 1.2rem; margin: 15px 0;">Score</p>
             <button class="home-btn" onclick="goHome()">Main Menu Par Jayein</button>
         </div>
+
     </div>
 
     <script>
+        // Database: Yahan aap naye questions add kar sakte hain
         const quizzes = {
             gk: {
                 title: "General Knowledge",
